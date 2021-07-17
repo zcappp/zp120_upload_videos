@@ -1,0 +1,153 @@
+module.exports=`
+/**/
+
+.zp120B {
+    overflow: hidden;
+    position: relative;
+    width: 152px;
+    height: 152px;
+    margin: 1px;
+    border: 1px solid rgb(221, 221, 221);
+    display: inline-block;
+}
+
+.zp120B input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 9;
+    font-size: 0;
+}
+
+.zp120B img,
+.zp120B video {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    bottom: 0px;
+    right: 0px;
+    margin: auto;
+}
+
+.zp120B .zp120camera {
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    fill: rgba(0, 0, 0, 0.2);
+    width: 40%;
+}
+
+.zp120B label {
+    position: absolute;
+    bottom: 20%;
+    width: 100%;
+    text-align: center;
+    color: rgb(105, 105, 105);
+    cursor: pointer;
+}
+
+.zp120B svg {
+    position: absolute;
+    fill: grey;
+    background: white;
+    cursor: pointer;
+}
+
+.zp120B svg:hover,
+.zp120 .zmask svg:hover {
+    fill: rgb(9, 187, 7) !important;
+}
+
+.zp120Drag {
+    z-index: 99;
+    border: 1px solid #d5d5d5;
+    box-shadow: 0 5px 5px -5px rgba(0, 0, 0, .2), 0 -5px 5px -5px rgba(0, 0, 0, .2);
+}
+
+.zp120Drop {
+    background-color: gainsboro;
+}
+
+.zp120Drop * {
+    display: none;
+}
+
+
+.zp120U {
+    border-radius: 50%;
+}
+
+.zp120U::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 50%;
+    border: 3px solid #cdd1e0;
+    border-top-color: #388AE5;
+    animation: loadingspin 2s infinite linear;
+}
+
+.zp120U>div {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 9;
+    text-align: center;
+    transform: translate(-50%, -50%);
+    color: rgb(255, 255, 255);
+    font-weight: bolder;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+.zp120Z {
+    cursor: zoom-in;
+    background: #f6f6f6;
+}
+
+.zp118handler {
+    right: 0px;
+    bottom: 0px;
+    cursor: move;
+    width: 20px;
+    padding: 2px;
+    border-top-left-radius: 10px;
+}
+
+.zp118del {
+    left: 0px;
+    bottom: 0px;
+    cursor: pointer;
+    width: 20px;
+    padding: 2px;
+    border-top-right-radius: 10px;
+}
+
+.zp120 .zmask video {
+    margin: auto;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    max-height: 100%;
+    right: 0px;
+    left: 0px;
+    cursor: zoom-out;
+}
+
+.zp120 .zmask svg {
+    fill: grey;
+    width: 30px;
+    position: fixed;
+    top: 9px;
+    right: 9px;
+    z-index: 999;
+}
+
+
+`
