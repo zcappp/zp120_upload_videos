@@ -91,7 +91,7 @@ module.exports=`
     border-radius: 50%;
     border: 3px solid #cdd1e0;
     border-top-color: #388AE5;
-    animation: loadingspin 2s infinite linear;
+    animation: loading 2s infinite linear;
 }
 
 .zp120U>div {
