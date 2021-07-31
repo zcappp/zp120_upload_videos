@@ -28,7 +28,7 @@ function onInit(ref) {
     const { id, exc, props, render } = ref
     ref.uploading = []
     if (props.gallery) {
-        EL.网盘 = render({ t: "Plugin", p: { local: true, ID: "zp101", P: { mineOnly: true, onSelect: '$("#' + id + '").add($x)', type: "v", label: "视频库" } } }, id + "_0")
+        EL.网盘 = render({ t: "Plugin", p: { local: true, ID: "zp101", P: { mineOnly: true, onSelect: '$("#' + id + '").add(url)', type: "v", label: "视频库" } } }, id + "_0")
         ref.container.add = url => {
             let arr = ref.getForm(props.dbf)
             if (!Array.isArray(arr)) arr = []
