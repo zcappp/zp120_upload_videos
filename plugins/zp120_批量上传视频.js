@@ -63,24 +63,26 @@ function onChange(ref, e) {
         const x = URL.createObjectURL(file)
         ref.uploading.push(x)
         render()
-        exc('upload(file, onProgress, onSuccess, onError)', {
+        exc('upload(file, option)', {
             file,
-            onProgress: r => {
-                $("#" + ref.id + " .zp120_" + ref.uploading.indexOf(x) + " div").innerHTML = r.percent + "%"
-            },
-            onSuccess: r => {
-                ref.uploading.splice(ref.uploading.indexOf(x), 1)
-                let arr = ref.getForm(props.dbf)
-                if (!Array.isArray(arr)) arr = []
-                arr.unshift(r.url)
-                ref.setForm(props.dbf, arr)
-                URL.revokeObjectURL(x)
-            },
-            onError: r => {
-                exc(`alert("上传出错了", r.error)`, { r })
-                ref.uploading.splice(ref.uploading.indexOf(x), 1)
-                URL.revokeObjectURL(x)
-                exc('render()')
+            option: {
+                onProgress: r => {
+                    $("#" + ref.id + " .zp120_" + ref.uploading.indexOf(x) + " div").innerHTML = r.percent + "%"
+                },
+                onSuccess: r => {
+                    ref.uploading.splice(ref.uploading.indexOf(x), 1)
+                    let arr = ref.getForm(props.dbf)
+                    if (!Array.isArray(arr)) arr = []
+                    arr.unshift(r.url)
+                    ref.setForm(props.dbf, arr)
+                    URL.revokeObjectURL(x)
+                },
+                onError: r => {
+                    exc(`alert("上传出错了", r.error)`, { r })
+                    ref.uploading.splice(ref.uploading.indexOf(x), 1)
+                    URL.revokeObjectURL(x)
+                    exc('render()')
+                }
             }
         })
     }, 2000 * i))
