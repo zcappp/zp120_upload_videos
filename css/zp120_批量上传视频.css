@@ -111,7 +111,7 @@ module.exports=`
     background: #f6f6f6;
 }
 
-.zp118handler {
+.zp120handler {
     right: 0px;
     bottom: 0px;
     cursor: move;
@@ -120,7 +120,7 @@ module.exports=`
     border-top-left-radius: 10px;
 }
 
-.zp118del {
+.zp120del {
     left: 0px;
     bottom: 0px;
     cursor: pointer;
@@ -147,6 +147,10 @@ module.exports=`
     top: 9px;
     right: 9px;
     z-index: 999;
+}
+
+.zp120 .zp101 {
+    display: inline-block;
 }
 
 
