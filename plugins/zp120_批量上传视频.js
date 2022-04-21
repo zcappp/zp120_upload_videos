@@ -41,7 +41,7 @@ function onInit(ref) {
             ref.setForm(props.dbf, arr)
         }
     }
-    exc('load("//z.zcwebs.cn/vendor/Sortable_1.13.0.js")', {}, () => {
+    exc('load("//z.zccdn.cn/vendor/Sortable_1.13.0.js")', {}, () => {
         new Sortable(ref.container, {
             animation: 150,
             forceFallback: true,
