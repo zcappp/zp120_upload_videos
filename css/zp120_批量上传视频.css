@@ -55,7 +55,7 @@ module.exports=`
 .zp120B svg {
     position: absolute;
     fill: grey;
-    background: white;
+    background: #ffffffb3;
     cursor: pointer;
 }
 
