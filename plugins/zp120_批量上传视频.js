@@ -147,10 +147,10 @@ function upload(ref) {
     exc('info("正在上传，请稍候")')
     close(ref)
     exc('$resource.uploads(urls, "v")', { urls }, r => {
-        if (!r || r.ng.length) exc(`alert("上传出错了", r ? r.ng : "")`)
+        if (!r || r.ng.length) exc(`alert("上传出错了", reason)`, { reason: r ? JSON.stringify(r.ng, null, "\t") : "" })
         if (r.arr.length) {
             let arr = r.arr.map(a => a.url)
-            ref.arr = [...arr, ...ref.arr]
+            ref.arr = [...ref.arr, ...arr]
             ref.setForm(ref.props.dbf, ref.arr)
             exc('render()')
         }

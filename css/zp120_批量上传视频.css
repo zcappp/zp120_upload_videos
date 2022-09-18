@@ -5,8 +5,8 @@ module.exports=`
     overflow: hidden;
     position: relative;
     color: rgb(81 81 81);
-    width: 152px;
-    height: 152px;
+    width: 100px;
+    height: 100px;
     margin: 1px;
     border: 1px solid rgb(221, 221, 221);
     border-radius: 2px;
