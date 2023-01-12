@@ -6,7 +6,7 @@ function render(ref) {
     const isUploading = arr.find(a => a.startsWith("blob"))
     return <React.Fragment>
         {arr.map((a, i) => <div className={"zp120B zp120_" + i + (a.startsWith("blob") ? " zp120U" : " zp120Z")} onClick={() => { if(!a.startsWith("blob")) { ref.zoom = a; render() }}} key={a + i}>
-            <div/>
+            <div className="zp120progress"/>
             {a.startsWith("blob") || !a.endsWith("mp4") ? <video src={a}/> : <img src={a + "?x-oss-process=video/snapshot,m_fast,t_5000,w_0,ar_auto"}/>}
             {a.startsWith("blob") ? "" : <i className="zplaybtn"/>}
             {!isUploading && <svg onClick={e => remove(ref, i, e)} className="zsvg zp120del" viewBox="64 64 896 896"><path d={EL.remove}/></svg>}
@@ -76,7 +76,7 @@ function onChange(ref, e) {
             file,
             option: {
                 onProgress: r => {
-                    $("#" + ref.id + " .zp120_" + ref.arr.indexOf(x) + " div").innerHTML = r.percent + "%"
+                    $("#" + ref.id + " .zp120_" + ref.arr.indexOf(x) + " .zp120progress").innerHTML = r.percent + "%"
                 },
                 onSuccess: r => {
                     let arr = ref.getForm(props.dbf)

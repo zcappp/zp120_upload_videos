@@ -64,6 +64,7 @@ module.exports=`
     border-top-right-radius: 7px;
     padding: 2px;
     z-index: 9;
+    font-size: 13px;
 }
 
 .zp120B svg {
@@ -92,11 +93,6 @@ module.exports=`
     display: none;
 }
 
-
-.zp120U {
-    border-radius: 50%;
-}
-
 .zp120U::after {
     content: '';
     position: absolute;
@@ -109,7 +105,7 @@ module.exports=`
     animation: loading 2s infinite linear;
 }
 
-.zp120U>div {
+.zp120U .zp120progress {
     position: absolute;
     top: 50%;
     left: 50%;
