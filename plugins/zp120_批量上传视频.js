@@ -24,7 +24,7 @@ function render(ref) {
     </React.Fragment>
 }
 
-function onInit(ref) {
+function init(ref) {
     const { id, exc, props, render } = ref
     const arr = ref.getForm(props.dbf)
     if (Array.isArray(arr)) {
@@ -177,7 +177,7 @@ $plugin({
         label: "允许通过URL上传"
     }],
     render,
-    onInit,
+    init,
     css
 })
 
