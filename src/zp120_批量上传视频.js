@@ -1,5 +1,5 @@
 import React from "react"
-import css from "../css/zp120_批量上传视频.css"
+import css from "./zp120_批量上传视频.css"
 
 function render(ref) {
     const { exc, render, props, arr = [] } = ref
