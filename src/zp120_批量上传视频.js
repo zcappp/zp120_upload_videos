@@ -25,19 +25,20 @@ function render(ref) {
 }
 
 function init(ref) {
-    const { id, exc, props, render } = ref
-    const arr = ref.getForm(props.dbf)
+    const { getForm, id, exc, props, render } = ref
+    if (!getForm) return exc('warn("请置于表单容器中")')
+    const arr = getForm(props.dbf)
     if (Array.isArray(arr)) {
         ref.arr = [...arr]
     } else {
-        if (arr) warn("表单字段必须是数组")
+        if (arr) exc('warn("表单字段必须是数组")')
         ref.arr = []
     }
     if (props.gallery) {
         EL.网盘 = render({ t: "Plugin", p: { ID: "zp101", P: { mineOnly: true, onSelect: '$("#' + id + '").add(url)', type: "v", label: "视频库" } } }, id + "_0")
         ref.container.add = url => {
             ref.arr.push(url)
-            let arr = ref.getForm(props.dbf)
+            let arr = getForm(props.dbf)
             if (!Array.isArray(arr)) arr = []
             arr.push(url)
             ref.setForm(props.dbf, arr)
@@ -49,7 +50,7 @@ function init(ref) {
             forceFallback: true,
             fallbackTolerance: 5,
             onSort: e => {
-                let arr = ref.getForm(props.dbf)
+                let arr = getForm(props.dbf)
                 if (!Array.isArray(arr)) arr = []
                 arr.splice(e.newDraggableIndex, 0, arr.splice(e.oldDraggableIndex, 1)[0])
                 ref.setForm(props.dbf, arr)
