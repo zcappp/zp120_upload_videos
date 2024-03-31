@@ -124,11 +124,11 @@ function url(ref) {
         <div className="zmask" onClick={() => close(ref)}/>
         <div className="zmodal">
             <svg onClick={() => close(ref)} className="zsvg" viewBox="64 64 896 896"><path d={EL.remove}/></svg>
-            <div className="zmodal-hd">通过URL上传</div>
-            <div className="zmodal-bd"><textarea rows="10" placeholder="把视频URL粘贴在这里，每行一条" className="zinput"/></div>
-            <div className="zmodal-ft">
+            <div className="hd">通过URL上传</div>
+            <div className="bd"><textarea rows="10" placeholder="把视频URL粘贴在这里，每行一条" className="zinput"/></div>
+            <div className="ft">
                 <div className="zbtn" onClick={() => close(ref)}>取消</div>
-                <div className="zbtn zprimary" onClick={() => upload(ref)}>上传</div>
+                <div className="zbtn main" onClick={() => upload(ref)}>上传</div>
             </div>
         </div>
     </div>
