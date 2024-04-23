@@ -164,11 +164,6 @@ module.exports=`
     display: inline-block;
 }
 
-.zp120 .zmodal {
-    width: 750px;
-    max-width: calc(100% - 8px);
-}
-
 .zp120 .zmodal textarea {
     width: 100%;
     white-space: nowrap;

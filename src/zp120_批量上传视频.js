@@ -5,7 +5,7 @@ function render(ref) {
     const { exc, render, props, arr = [] } = ref
     const isUploading = arr.find(a => a.startsWith("blob"))
     return <React.Fragment>
-        {arr.map((a, i) => <div className={"zp120B zp120_" + i + (a.startsWith("blob") ? " zp120U" : " zp120Z")} onClick={() => { if(!a.startsWith("blob")) { ref.zoom = a; render() }}} key={a + i}>
+        {arr.map((a, i) => <div className={"zp120B zp120_" + i + (a.startsWith("blob") ? " zp120U" : " zp120Z")} onClick={() => { if(!a.startsWith("blob")) preview(ref, a)}} key={a + i}>
             <div className="zp120progress"/>
             {a.startsWith("blob") || !a.endsWith("mp4") ? <video src={a}/> : <img src={a + "?x-oss-process=video/snapshot,m_fast,t_5000,w_0,ar_auto"}/>}
             {a.startsWith("blob") ? "" : <i className="zplaybtn"/>}
@@ -19,7 +19,6 @@ function render(ref) {
             {!!ref.props.url && <span onClick={() => url(ref)}>URL</span>}
             {ref.modal}
         </div>
-        {ref.zoom && <div onClick={() => {delete ref.zoom; render()}} className="zmask"><video src={ref.zoom} controls="controls" autoPlay="autoplay"/>{EL.del}</div>}
         <div style={{display: "none"}}/>
     </React.Fragment>
 }
@@ -123,8 +122,8 @@ function url(ref) {
     ref.modal = <div className="zmodals">
         <div className="zmask" onClick={() => close(ref)}/>
         <div className="zmodal">
-            <svg onClick={() => close(ref)} className="zsvg" viewBox="64 64 896 896"><path d={EL.remove}/></svg>
-            <div className="hd">通过URL上传</div>
+            <svg onClick={() => close(ref)} className="zsvg x" viewBox="64 64 896 896"><path d={EL.remove}/></svg>
+            <h3 className="hd">通过URL上传</h3>
             <div className="bd"><textarea rows="10" placeholder="把视频URL粘贴在这里，每行一条" className="zinput"/></div>
             <div className="ft">
                 <div className="zbtn" onClick={() => close(ref)}>取消</div>
@@ -133,7 +132,23 @@ function url(ref) {
         </div>
     </div>
     ref.render()
-    setTimeout(() => $(".zp120B .zmodal textarea").focus(), 9)
+    setTimeout(() => {
+        $(".zp120B .zmodals").classList.add("open")
+        $(".zp120B .zmodal textarea").focus()
+    }, 99)
+}
+
+function preview(ref, video) {
+    ref.modal = <div className="zmodals">
+        <div className="zmask" onClick={() => close(ref)}/>
+        <div className="zmodal" style={{width:"100vw",height:"100vh"}}>
+            <svg onClick={() => close(ref)} className="zsvg x" viewBox="64 64 896 896"><path d={EL.remove}/></svg>
+            <h3 className="hd">{ref.props.dbf}</h3>
+            <div className="bd"><video src={video} controls="controls" autoPlay="autoplay"/></div>
+        </div>
+    </div>
+    ref.render()
+    setTimeout(() => $(".zp120B .zmodals").classList.add("open"), 99)
 }
 
 function close(ref) {
