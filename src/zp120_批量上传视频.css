@@ -125,8 +125,8 @@ module.exports=`
 .zp120handler {
     right: 0px;
     bottom: 0px;
-    cursor: move;
-    width: 20px;
+    cursor: grab !important;
+    width: 15px;
     padding: 2px;
     border-top-left-radius: 10px;
 }
@@ -135,9 +135,14 @@ module.exports=`
     left: 0px;
     bottom: 0px;
     cursor: pointer;
-    width: 14px;
+    width: 11px;
+    height: 8px;
     padding: 5px;
+    font-size: 11px;
     border-top-right-radius: 10px;
+    color: grey;
+    background: #ffffffb3;
+    position: absolute;
 }
 
 .zp120 .zmask video {
