@@ -37,13 +37,18 @@ module.exports=`
     max-width: 100%;
 }
 
-.zp120B .zp120camera {
+.zp120B .zvideo {
     position: absolute;
     top: 35%;
     left: 50%;
     transform: translate(-50%, -50%);
-    fill: rgba(0, 0, 0, 0.2);
-    width: 40%;
+    font-size: 2em;
+    padding: 0;
+    color: silver;
+}
+
+.zp120noLabel .zvideo {
+    top: 50%;
 }
 
 .zp120B label {
@@ -53,30 +58,6 @@ module.exports=`
     text-align: center;
     color: rgb(105, 105, 105);
     cursor: pointer;
-}
-
-.zp120B span {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    cursor: pointer;
-    background: #e3e3e3;
-    border-top-right-radius: 7px;
-    padding: 2px;
-    z-index: 9;
-    font-size: 13px;
-}
-
-.zp120B svg {
-    position: absolute;
-    fill: grey;
-    background: #ffffffb3;
-    cursor: pointer;
-}
-
-.zp120B svg:hover,
-.zp120 .zmask svg:hover {
-    fill: rgb(9, 187, 7) !important;
 }
 
 .zp120Drag {
@@ -123,12 +104,16 @@ module.exports=`
 }
 
 .zp120handler {
+    position: absolute;
     right: 0px;
     bottom: 0px;
     cursor: grab !important;
     width: 15px;
     padding: 2px;
+    background: #ffffffb3;
     border-top-left-radius: 10px;
+    color: grey;
+    font-size: 11px;
 }
 
 .zp120del {
@@ -145,6 +130,18 @@ module.exports=`
     position: absolute;
 }
 
+.zp120url {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    cursor: pointer;
+    background: #e3e3e3;
+    border-top-right-radius: 7px;
+    padding: 2px;
+    z-index: 9;
+    font-size: 13px;
+}
+
 .zp120 .zmask video {
     margin: auto;
     position: fixed;
@@ -154,19 +151,6 @@ module.exports=`
     right: 0px;
     left: 0px;
     cursor: zoom-out;
-}
-
-.zp120 .zmask svg {
-    fill: grey;
-    width: 30px;
-    position: fixed;
-    top: 9px;
-    right: 9px;
-    z-index: 999;
-}
-
-.zp120 .zp101 {
-    display: inline-block;
 }
 
 .zp120 .zmodal textarea {

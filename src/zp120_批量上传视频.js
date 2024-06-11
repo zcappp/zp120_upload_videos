@@ -2,21 +2,22 @@ import React from "react"
 import css from "./zp120_批量上传视频.css"
 
 function render(ref) {
-    const { exc, render, props, arr = [] } = ref
-    const isUploading = arr.find(a => a.startsWith("blob"))
+     let { props } = ref
+    let arr = gets(ref)
     return <React.Fragment>
-        {arr.map((a, i) => <div className={"zp120B zp120_" + i + (a.startsWith("blob") ? " zp120U" : " zp120Z")} onClick={() => { if(!a.startsWith("blob")) preview(ref, a)}} key={a + i}>
-            <div className="zp120progress"/>
-            {a.startsWith("blob") || !a.endsWith("mp4") ? <video src={a}/> : <img src={a + "?x-oss-process=video/snapshot,m_fast,t_5000,w_0,ar_auto"}/>}
-            {a.startsWith("blob") ? "" : <i className="zplaybtn"/>}
-            {!isUploading && <i onClick={e => remove(ref, i, e)} className="zdel zp120del"/>}
-            {!isUploading && EL.handle}
+        {arr.map((a, i) => <div className="zp120B zp120Z" onClick={() => preview(ref, a)} key={a + i}>
+            <video src={a}/>
+            <i onClick={e => {e.stopPropagation(); ref.exc('confirm("确定要删除吗？")', {}, () => {arr.splice(i, 1); ref.form ? ref.form[props.dbf] = arr : ref.setForm(props.dbf, arr); ref.exc('render()')})}} className="zdel zp120del"/>
+            <i className="zmove zp120handler"/>
         </div>)}
-        {EL.网盘}
+        {ref.ing.map((a, i) => <div className={"zp120B zp120_" + i + " zp120U"} onClick={() => preview(ref, a)} key={a + i}>
+            <div className="zp120progress"/>
+            <video src={a}/>
+        </div>)}
         <div className="zp120B">
-            <div>{EL.camera}<label>{props.dbf ? props.label || "上传视频" : "请配置表单字段"}</label></div>
+            <div className={props.noLabel ? "zp120noLabel" : ""}><span className="zvideo"><span/></span><label>{props.noLabel ? "" : (props.label || "上传视频")}</label></div>
             <input onChange={e => onChange(ref, e)} type="file" accept="video/*" multiple="multiple"/>
-            {!!ref.props.url && <span onClick={() => url(ref)}>URL</span>}
+            {!!props.url && <span className="zp120url" onClick={() => popUrl(ref)}>URL</span>}
             {ref.modal}
         </div>
         <div style={{display: "none"}}/>
@@ -24,37 +25,17 @@ function render(ref) {
 }
 
 function init(ref) {
-    const { getForm, id, exc, props, render } = ref
-    if (!getForm) return exc('warn("请置于表单容器中")')
-    const arr = getForm(props.dbf)
-    if (Array.isArray(arr)) {
-        ref.arr = [...arr]
-    } else {
-        if (arr) exc('warn("表单字段必须是数组")')
-        ref.arr = []
-    }
-    if (props.gallery) {
-        EL.网盘 = render({ t: "Plugin", p: { ID: "zp101", P: { mineOnly: true, onSelect: '$("#' + id + '").add(url)', type: "v", label: "视频库" } } }, id + "_0")
-        ref.container.add = url => {
-            ref.arr.push(url)
-            let arr = getForm(props.dbf)
-            if (!Array.isArray(arr)) arr = []
-            arr.push(url)
-            ref.setForm(props.dbf, arr)
-        }
-    }
+    const { id, exc, props, render } = ref
+    ref.ing = []
     exc('load("//z.zccdn.cn/vendor/Sortable_1.13.0.js")', {}, () => {
         new Sortable(ref.container, {
             animation: 150,
             forceFallback: true,
             fallbackTolerance: 5,
             onSort: e => {
-                let arr = getForm(props.dbf)
-                if (!Array.isArray(arr)) arr = []
+                let arr = gets(ref)
                 arr.splice(e.newDraggableIndex, 0, arr.splice(e.oldDraggableIndex, 1)[0])
-                ref.setForm(props.dbf, arr)
-                ref.arr = [...arr]
-                render()
+                ref.form ? ref.form[props.dbf] = arr : ref.setForm(props.dbf, arr)
             },
             handle: "#" + id + " .zp120handler",
             draggable: ".zp120Z",
@@ -64,28 +45,40 @@ function init(ref) {
     })
 }
 
+function gets(ref) {
+    let { dbf, form } = ref.props
+    let arr
+    if (form) {
+        ref.form = typeof form == "string" ? ref.excA(form) : form
+        if (typeof ref.form == "object") arr = ref.form[dbf]
+    } else if (ref.getForm) {
+        arr = ref.getForm(dbf)
+    }
+    return Array.isArray(arr) ? arr : []
+}
+
 function onChange(ref, e) {
     const { exc, render, props } = ref
     const arr = Array.from(e.target.files)
     if (!arr.length) return exc('warn("请选择视频")')
+    if (arr.find(a => a.size / 1048576 > (props.max || 900))) return exc(`warn("文件太大, 请压缩至${props.max || 900}M以下")`)
     arr.forEach((file, i) => setTimeout(() => {
         const x = URL.createObjectURL(file)
-        ref.arr.push(x)
+        ref.ing.push(x)
         render()
         exc('upload(file, option)', {
             file,
             option: {
                 onProgress: r => {
-                    $("#" + ref.id + " .zp120_" + ref.arr.indexOf(x) + " .zp120progress").innerHTML = r.percent + "%"
+                    $("#" + ref.id + " .zp120_" + ref.ing.indexOf(x) + " .zp120progress").innerHTML = r.percent + "%"
                 },
                 onSuccess: r => {
-                    let arr = ref.getForm(props.dbf)
-                    if (!Array.isArray(arr)) arr = []
-                    arr.push(r.url)
-                    ref.setForm(props.dbf, arr)
+                    let { props } = ref
                     preload(r.url, ref.container, () => {
-                        ref.arr.splice(ref.arr.indexOf(x), 1, r.url)
+                        ref.ing.splice(ref.ing.indexOf(x), 1)
                         URL.revokeObjectURL(x)
+                        ref.form ? ref.form[props.dbf].push(r.url) : ref.setForm(props.dbf, gets(ref).concat([r.url]))
+                        if (props.onSuccess) exc(props.onSuccess, { ...ref.ctx, $ext_ctx: ref.ctx, $val: gets(ref).concat([r.url]), ...r }, () => ref.exc("render()"))
                         exc('render()')
                     })
                 },
@@ -99,17 +92,6 @@ function onChange(ref, e) {
     }, 2000 * i))
 }
 
-function remove(ref, i, e) {
-    e.stopPropagation()
-    ref.exc('confirm("确定要删除吗？")', {}, () => {
-        let arr = ref.getForm(ref.props.dbf)
-        arr.splice(i, 1)
-        ref.arr = [...arr]
-        ref.setForm(ref.props.dbf, arr)
-        ref.exc('render()')
-    })
-}
-
 function preload(url, container, onload) {
     let el = document.createElement(url.endsWith("mp4") ? "img" : "video")
     el.src = url.endsWith("mp4") ? url + "?x-oss-process=video/snapshot,m_fast,t_5000,w_0,ar_auto" : url
@@ -118,7 +100,7 @@ function preload(url, container, onload) {
     container.lastElementChild.appendChild(el)
 }
 
-function url(ref) {
+function popUrl(ref) {
     ref.modal = <div className="zmodals">
         <div className="zmask" onClick={() => close(ref)}/>
         <div className="zmodal">
@@ -166,8 +148,8 @@ function upload(ref) {
         if (!r || r.ng.length) exc(`alert("上传出错了", reason)`, { reason: r ? JSON.stringify(r.ng, null, "\t") : "" })
         if (r.arr.length) {
             let arr = r.arr.map(a => a.url)
-            ref.arr = [...ref.arr, ...arr]
-            ref.setForm(ref.props.dbf, ref.arr)
+            arr = [...gets(ref), ...arr]
+            ref.form ? ref.form[ref.props.dbf] = arr : ref.setForm(ref.props.dbf, arr)
             exc('render()')
         }
     })
@@ -177,30 +159,39 @@ $plugin({
     id: "zp120",
     props: [{
         prop: "dbf",
-        type: "text",
-        label: "表单字段"
+        label: "字段名",
+        ph: "必填"
+    }, {
+        prop: "form",
+        label: "字段容器",
+        ph: "如不填则使用祖先节点的表单容器"
+    }, {
+        prop: "max",
+        type: "number",
+        label: "最大文件大小(单位:MB)",
+        ph: "默认最大900MB"
+    }, {
+        prop: "noLabel",
+        type: "switch",
+        label: "不显示文本"
     }, {
         prop: "label",
-        type: "text",
-        label: "[上传视频]文本"
-    }, {
-        prop: "gallery",
-        type: "switch",
-        label: "包含视频库"
+        label: "[上传文件] 文本",
+        show: "!P.noLabel"
     }, {
         prop: "url",
         type: "switch",
         label: "允许通过URL上传"
+    }, {
+        prop: "onSuccess",
+        type: "exp",
+        label: "上传成功表达式",
+        ph: "$val"
     }],
     render,
     init,
     css
 })
-
-const EL = {
-    camera: <svg className="zsvg zp120camera" viewBox="64 64 896 896"><path d="M912 302.3L784 376V224c0-35.3-28.7-64-64-64H128c-35.3 0-64 28.7-64 64v576c0 35.3 28.7 64 64 64h592c35.3 0 64-28.7 64-64V648l128 73.7c21.3 12.3 48-3.1 48-27.6V330c0-24.6-26.7-40-48-27.7zM712 792H136V232h576v560zm176-167l-104-59.8V458.9L888 399v226zM208 360h112c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8H208c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8z"/></svg>,
-    handle: <svg className="zsvg zp120handler" viewBox="0 0 1024 1024"><path d="M256 160a96 96 0 1 0 0 192 96 96 0 0 0 0-192z m0 512a96 96 0 1 0 0 192 96 96 0 0 0 0-192zM672 256a96 96 0 1 1 192 0 96 96 0 0 1-192 0z m96 416a96 96 0 1 0 0 192 96 96 0 0 0 0-192z"/></svg>,
-}
 
 
 /*
